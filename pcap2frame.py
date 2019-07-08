@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 """ 
     Name:   Pcap2Frame
@@ -31,7 +31,7 @@
 
 from dateutil import parser
 from datetime import datetime
-from StringIO import StringIO
+from io import StringIO
 import csv,argparse,time,os,sys
 
 #lambdas
@@ -72,7 +72,7 @@ tsharkCmds = {
 #col.Info
 
 def ExtractPcapData(pcap,protocol):
-    print dat(),"Processing:",pcap
+    print(dat(),"Processing:",pcap)
 
     outputFileName = "%s_%s.txt" % (pcap.split(".")[0],protocol.upper())
     tsharkBaseCmd = tsharkCmds.get(protocol)
@@ -101,7 +101,7 @@ def CreateCsv(outputFileName,protocol,convertTime):
             try:
                 timestamp = parser.parse(entry[2].split('.')[0]).strftime("%Y-%m-%d %H:%M:%S")
             except:
-                print "There is a problem processing PCAP. If the error occured while processing UDP packets, try upgrading tshark."
+                print("There is a problem processing PCAP. If the error occured while processing UDP packets, try upgrading tshark.")
                 sys.exit()
 
             if convertTime:
@@ -148,14 +148,14 @@ def CreateDataFrame(csvFileName,protocol,sframe):
         frameName = csvFileName.replace(".csv","_SFRAME")
         dataframe = sframe.SFrame(csvFileName) #create dataframe in SFrame
         dataframe.save(frameName) #save sframe
-        print dat(),"Creating SFRAME:",frameName
+        print(dat(),"Creating SFRAME:",frameName)
     else:
         import pandas
 
         frameName = csvFileName.replace(".csv",".PANDAS")
         pDataframe = pandas.read_csv(csvFileName).fillna('N/A') #create pandas dataframe
         pDataframe.to_pickle(frameName) #save pandas dataframe
-        print dat(),"Creating:",frameName
+        print(dat(),"Creating:",frameName)
 
 def main():
     aParser = argparse.ArgumentParser()
